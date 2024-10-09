@@ -1,8 +1,13 @@
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+import nltk
 import re
 import pickle
 import streamlit as st
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+
 
 
 st.title("Spam Classifier😊")
