@@ -10,7 +10,7 @@ nltk.download('wordnet')
 
 
 
-st.title("Spam Classifier😊")
+st.title("Spam Classifier🚫📧")
 
 
 sentence =st.text_input("Enter Message")
