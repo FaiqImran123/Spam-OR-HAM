@@ -1,1 +1,2 @@
 # Spam-OR-HAM
+-  Developed a spam classifier project using the Kaggle spam dataset with over 5,000 messages, achieving 96% accuracy with a Random Forest Classifier. The project utilized basic NLP techniques such as tokenization, lemmatization, stemming, and removal of stopwords for text processing. I employed TF-IDF to convert text into vectors for effective classification, showcasing the power of machine learning in distinguishing between spam and ham messages.
