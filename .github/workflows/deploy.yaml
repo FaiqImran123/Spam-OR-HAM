@@ -44,8 +44,6 @@ jobs:
       # Step 6: Push to Hugging Face Spaces repository
       - name: Push to Hugging Face Spaces
         run: |
-          # Create a new repository on Hugging Face (if it doesn't exist already)
-          huggingface-cli repo create spam-or-ham --type space --sdk streamlit --yes
 
           # Clone the repository of Hugging Face Space
           git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
