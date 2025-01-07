@@ -1,46 +1,29 @@
-name: CI/CD for ML Model to Hugging Face Spaces
+name: Deploy to Hugging Face Spaces
 
 on:
   push:
-    branches:
-      - FaiqImran123  # Trigger deployment on push to the 'FaiqImran123' branch
-  pull_request:
     branches:
       - FaiqImran123
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt  # Install dependencies from your requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Log in to Hugging Face
-      run: |
-        mkdir -p ~/.huggingface  # Create the directory if it doesn't exist
-        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" > ~/.huggingface/token  # Store Hugging Face API token in a file
+      - name: Hugging Face Login
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: huggingface-cli login --token $HF_TOKEN
 
-    - name: Push app to Hugging Face Space
-      run: |
-        # Clone the Hugging Face Space repository
-        git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
-        cd SpamHam_Project
-        
-        # Copy your app files and requirements.txt to the Space repository
-        sudo cp -r /* .  # Change 'path_to_your_app' to the actual folder where your app is
-
-        # Commit and push the changes to Hugging Face Space
-        git add .
-        git commit -m "Deploy new Streamlit app version"
-        git push origin FaiqImran123  # Push changes to your custom branch ('FaiqImran123')
+      - name: Push to Hugging Face
+        run: git push
