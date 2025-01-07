@@ -23,8 +23,9 @@ jobs:
       - name: Hugging Face Login
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: pip install huggingface_hub
-        huggingface-cli login --token $HF_TOKEN
+        run: 
+          pip install huggingface_hub
+          huggingface-cli login --token $HF_TOKEN
 
       - name: Push to Hugging Face
         run: git push
