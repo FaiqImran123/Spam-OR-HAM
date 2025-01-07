@@ -46,7 +46,7 @@ jobs:
         run: |
 
           # Clone the repository of Hugging Face Space
-          git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
+          git clone git clone https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/Fiqa/SpamHam_Project
 
           # Move the necessary files to the repository folder
           mv hf_space_repo/* SpamHam_Project/
