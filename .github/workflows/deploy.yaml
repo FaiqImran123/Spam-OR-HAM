@@ -6,7 +6,7 @@ on:
       - FaiqImran123  # Trigger deployment on push to the main branch
   pull_request:
     branches:
-      - main
+      - FaiqImran123
 
 jobs:
   deploy:
@@ -24,18 +24,23 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r requirements.txt  # Install dependencies from your requirements.txt
 
     - name: Log in to Hugging Face
       run: |
-        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" > ~/.huggingface/token
-    
-    - name: Push model to Hugging Face Spaces
-      run: |
-        git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
-        cd your-space-name
-        cp -r ../model/* .  # Copy model files into the space repository
-        git add .
-        git commit -m "Deploy new model version"
-        git push origin main
+        mkdir -p ~/.huggingface  # Create the directory if it doesn't exist
+        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" > ~/.huggingface/token  # Store the Hugging Face API token
 
+    - name: Push app to Hugging Face Space
+      run: |
+        # Clone the Hugging Face Space repository
+        git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
+        cd SpamHam_Project
+        
+        # Copy your app files and requirements.txt to the Space repository
+        cp -r ../path_to_your_app/* .  # Make sure to change path_to_your_app to where your app files are stored
+
+        # Commit and push the changes to Hugging Face Space
+        git add .
+        git commit -m "Deploy new Streamlit app version"
+        git push origin main  # Push the changes to the Hugging Face space repository
