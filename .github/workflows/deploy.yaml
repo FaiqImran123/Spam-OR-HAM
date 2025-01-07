@@ -27,13 +27,31 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      # Step 4: Deploy to Hugging Face Spaces
-      - name: Deploy to Hugging Face
+      # Step 4: Git Setup for Deployment to Hugging Face
+      - name: Set up Git for Hugging Face
+        run: |
+          git config --global user.name "FaiqImran"
+          git config --global user.email "faiq.imran000@gmail.com"  # Replace with your email
+
+      # Step 5: Push Code to Hugging Face Spaces Repository
+      - name: Push to Hugging Face Spaces
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Use the secret token for authentication
         run: |
+          # Log in to Hugging Face
           pip install huggingface_hub
           huggingface-cli login --token $HF_TOKEN
-          huggingface-cli repo create spam-or-ham --type space --sdk gradio --yes
-          huggingface-cli upload app.py --space FaiqImran/spam-or-ham
-          huggingface-cli upload requirements.txt --space your-username/spam-or-ham
+
+          # Clone the Hugging Face repository for the Space
+          huggingface-cli repo create spam-or-ham --type space --sdk streamlit --yes
+          git clone https://huggingface.co/spaces/FaiqImran/spam-or-ham
+
+          # Move your files into the space repository
+          cp app.py spam-or-ham/
+          cp requirements.txt spam-or-ham/
+
+          # Commit and push the changes
+          cd spam-or-ham
+          git add .
+          git commit -m "Deploy Streamlit app"
+          git push
