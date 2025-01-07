@@ -38,7 +38,7 @@ jobs:
         cd SpamHam_Project
         
         # Copy your app files and requirements.txt to the Space repository
-        cp -r * .  # Change 'path_to_your_app' to the actual folder where your app is
+        cp -r /* .  # Change 'path_to_your_app' to the actual folder where your app is
 
         # Commit and push the changes to Hugging Face Space
         git add .
