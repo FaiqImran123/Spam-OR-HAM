@@ -31,7 +31,7 @@ jobs:
       - name: Set up Git for Hugging Face
         run: |
           git config --global user.name "FaiqImran"
-          git config --global user.email "faiq.imran000@gmail.com"  # Replace with your email
+          git config --global user.email "your-email@example.com"  # Replace with your email
 
       # Step 5: Push Code to Hugging Face Spaces Repository
       - name: Push to Hugging Face Spaces
@@ -44,7 +44,7 @@ jobs:
 
           # Clone the Hugging Face repository for the Space
           huggingface-cli repo create spam-or-ham --type space --sdk streamlit --yes
-          git clone https://huggingface.co/spaces/FaiqImran/spam-or-ham
+          git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
 
           # Move your files into the space repository
           cp app.py spam-or-ham/
