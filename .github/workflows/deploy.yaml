@@ -54,7 +54,7 @@ jobs:
           # Commit and push the changes
           cd SpamHam_Project
           git config --global user.name "FaiqImran"
-          git config --global user.email "your-email@example.com"  # Replace with your email
+          git config --global user.email "faiq.imran000@gmail.com"  # Replace with your email
           git add .
           git commit -m "Deploy Streamlit app"
           git push
