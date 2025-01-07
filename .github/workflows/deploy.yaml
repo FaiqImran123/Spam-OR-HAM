@@ -1,60 +1,41 @@
-name: Deploy to Hugging Face Spaces
+name: CI/CD for ML Model to Hugging Face Spaces
 
 on:
   push:
     branches:
-      - FaiqImran123  # Run this workflow when pushing to the 'FaiqImran123' branch
+      - FaiqImran123  # Trigger deployment on push to the main branch
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository code
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      # Step 2: Set up Python environment
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      # Step 4: Set up Hugging Face Authentication
-      - name: Set up Hugging Face
-        run: |
-          pip install huggingface_hub
-          # Authenticate using Hugging Face Token stored in GitHub Secrets
-          python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}')"
+    - name: Log in to Hugging Face
+      run: |
+        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" > ~/.huggingface/token
+    
+    - name: Push model to Hugging Face Spaces
+      run: |
+        git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
+        cd your-space-name
+        cp -r ../model/* .  # Copy model files into the space repository
+        git add .
+        git commit -m "Deploy new model version"
+        git push origin main
 
-      # Step 5: Prepare files for Hugging Face Spaces
-      - name: Prepare Files
-        run: |
-          mkdir -p hf_space_repo
-          cp app.py hf_space_repo/
-          cp requirements.txt hf_space_repo/
-
-      # Step 6: Push to Hugging Face Spaces repository
-      - name: Push to Hugging Face Spaces
-        run: |
-
-          # Clone the repository of Hugging Face Space
-          git clone https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/Fiqa/SpamHam_Project
-
-          # Move the necessary files to the repository folder
-          mv hf_space_repo/* SpamHam_Project/
-
-          # Commit and push the changes
-          cd SpamHam_Project
-          git config --global user.name "FaiqImran123"
-          git config --global user.email "faiq.imran000@gmail.com"  # Replace with your email
-          git add .
-          git commit -m "Deploy Streamlit app"
-          git push
