@@ -29,7 +29,7 @@ jobs:
     - name: Log in to Hugging Face
       run: |
         mkdir -p ~/.huggingface  # Create the directory if it doesn't exist
-        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" > ~/.huggingface/token  # Store the Hugging Face API token
+        echo "HUGGINGFACE_API_KEY=${{ secrets.HF_API_TOKEN }}" 
 
     - name: Push app to Hugging Face Space
       run: |
