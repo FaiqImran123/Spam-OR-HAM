@@ -3,7 +3,7 @@ name: Deploy to Hugging Face Spaces
 on:
   push:
     branches:
-      - FaiqImran123  # Run this workflow when pushing to the 'main' branch
+      - FaiqImran123  # Run this workflow when pushing to the 'FaiqImran123' branch
 
 jobs:
   deploy:
@@ -27,31 +27,36 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      # Step 4: Git Setup for Deployment to Hugging Face
-      - name: Set up Git for Hugging Face
+      # Step 4: Set up Hugging Face Authentication
+      - name: Set up Hugging Face
         run: |
-          git config --global user.name "FaiqImran"
-          git config --global user.email "your-email@example.com"  # Replace with your email
-
-      # Step 5: Push Code to Hugging Face Spaces Repository
-      - name: Push to Hugging Face Spaces
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Use the secret token for authentication
-        run: |
-          # Log in to Hugging Face
           pip install huggingface_hub
-          huggingface-cli login --token $HF_TOKEN
+          # Authenticate using Hugging Face Token stored in GitHub Secrets
+          python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}')"
 
-          # Clone the Hugging Face repository for the Space
+      # Step 5: Prepare files for Hugging Face Spaces
+      - name: Prepare Files
+        run: |
+          mkdir -p hf_space_repo
+          cp app.py hf_space_repo/
+          cp requirements.txt hf_space_repo/
+
+      # Step 6: Push to Hugging Face Spaces repository
+      - name: Push to Hugging Face Spaces
+        run: |
+          # Create a new repository on Hugging Face (if it doesn't exist already)
           huggingface-cli repo create spam-or-ham --type space --sdk streamlit --yes
+
+          # Clone the repository of Hugging Face Space
           git clone https://huggingface.co/spaces/Fiqa/SpamHam_Project
 
-          # Move your files into the space repository
-          cp app.py spam-or-ham/
-          cp requirements.txt spam-or-ham/
+          # Move the necessary files to the repository folder
+          mv hf_space_repo/* SpamHam_Project/
 
           # Commit and push the changes
-          cd spam-or-ham
+          cd SpamHam_Project
+          git config --global user.name "FaiqImran"
+          git config --global user.email "your-email@example.com"  # Replace with your email
           git add .
           git commit -m "Deploy Streamlit app"
           git push
