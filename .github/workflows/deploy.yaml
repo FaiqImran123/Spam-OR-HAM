@@ -1,0 +1,39 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main  # Run this workflow when pushing to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      # Step 4: Deploy to Hugging Face Spaces
+      - name: Deploy to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  # Use the secret token for authentication
+        run: |
+          pip install huggingface_hub
+          huggingface-cli login --token $HF_TOKEN
+          huggingface-cli repo create spam-or-ham --type space --sdk gradio --yes
+          huggingface-cli upload app.py --space FaiqImran/spam-or-ham
+          huggingface-cli upload requirements.txt --space your-username/spam-or-ham
