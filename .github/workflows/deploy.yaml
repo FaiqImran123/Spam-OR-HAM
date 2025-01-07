@@ -3,7 +3,7 @@ name: Deploy to Hugging Face Spaces
 on:
   push:
     branches:
-      - main  # Run this workflow when pushing to the 'main' branch
+      - FaiqImran123  # Run this workflow when pushing to the 'main' branch
 
 jobs:
   deploy:
